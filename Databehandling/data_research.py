@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import LinearModels as LM
 import matplotlib.pyplot as plt
+import NonLinearModels_mlogit as NLM_mlogit
 
 
 pd.options.display.float_format = '{:.4f}'.format
