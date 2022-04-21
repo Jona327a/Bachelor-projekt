@@ -5,25 +5,24 @@ from scipy.optimize import minimize
 pd.options.display.float_format = '{:.4f}'.format
 path = "/Users/frederikluneborgholmjeppesen/Documents/Universitetet/3. år/Bachelorprojektet/MotorRegisterData-main/"
 
-# Final data
-final_data = pd.read_excel(path + 'final_data.xlsx')
-final_data.drop(columns = final_data.columns[0], axis = 1, inplace = True)
-final_data['Fuel'].replace(['El', 'Benzin', 'Diesel'], [0, 1, 2], inplace = True)
-print("Dataset:\n", final_data)
+# NOTICE: remember to choose the correct dataset
+dataset = pd.read_excel(path + 'choice_data_subset.xlsx')
+dataset['Fuel'].replace(['El', 'Benzin', 'Diesel'], [0, 1, 2], inplace = True)
+print("Dataset:\n", dataset)
 
-final_data = final_data.values
+dataset = dataset.values
 
-y = final_data[:, 2].astype(int)
+y = dataset[:, 2].astype(int)
 y = pd.DataFrame({'y' : y})
 #print("\ny:\n", y)
 
-x1 = final_data[:, 3].astype(float)
+x1 = dataset[:, 3].astype(float)
 x2 = np.ones(x1.shape).astype(float)
-#x3 = final_data[:, 4].astype(float)
-x4 = final_data[:, 7].astype(float)
-x5 = final_data[:, 5].astype(float)
+x3 = dataset[:, 4].astype(float)
+#x4 = dataset[:, 7].astype(float)
+x5 = dataset[:, 5].astype(float)
 
-x = pd.DataFrame({'Constant' : x2, 'Weight' : x1, 'Fuel efficiency (km/l)' : x4, 'Price' : x5})
+x = pd.DataFrame({'Constant' : x2, 'Weight' : x1, 'Engine effect (kW)' : x3, 'Price' : x5})
 #print("\nX:\n", x)
 
 y_label = list(y.columns)[0]
@@ -38,7 +37,7 @@ print("\nJ:", J)
 K = round(len(x_labels) / (J-1)) # J-1 since we only have covariates for the two 
 print("K:", K)
 
-N = final_data.shape[0]
+N = dataset.shape[0]
 print("N:", N)
 
 y = y.values.reshape((N, ))
@@ -110,6 +109,10 @@ def Q(theta):
 
 
 theta0 = np.zeros((K, J-1))
+print("\theta0:\n", theta0)
+print("\theta0's shape:", theta0.shape, "\n")
+
+
 res = minimize(Q, theta0)
 print(f'Convergence success? {res.success} (after {res.nit} iterations).')
 pd.DataFrame(res.x, index = x_labels, columns = ['coefficients'])
