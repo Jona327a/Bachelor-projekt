@@ -107,6 +107,22 @@ for i in range(0, choice_data.shape[0]):
 choice_data = choice_data.assign(afgiftspligtig_værdi = goal_seeks)
 afgiftspligtig_data = choice_data[['Year', 'afgiftspligtig_værdi', 'Fuel']]
 
+# Making the variable 'Markedsandele' in Choice Data
+J = choice_data[['Year', 'key']].groupby('Year').count()
+aarstal = choice_data['Year'].drop_duplicates()
+choice_data['Markedsandele'] = choice_data['No. of registrations']
+for aar in aarstal:
+    I = J.loc[aar].tolist()[0]
+    reg_sum = choice_data[['Year', 'No. of registrations']].set_index("Year").loc[aar].sum()[0]
+    shares = (choice_data[['Year', 'Markedsandele']].set_index("Year").loc[aar] / reg_sum).values
+    for i in range(0, I):
+        car_i = choice_data.set_index("Year").loc[aar].iloc[i]
+        index = choice_data.index
+        condition = choice_data['key'] == car_i.loc['key']
+        row = index[condition].tolist()[0]
+        choice_data.loc[row, 'Markedsandele'] = shares[i][0]
+markedsandele_data = choice_data[['Year', 'Markedsandele', 'Fuel']]
+
 # BILBASEN SCRAPE
 bilbasen_data = pd.read_csv(path + 'bilbasen_scrape.csv', delimiter=';', encoding = 'unicode_escape')
 bilbasen_data.rename(columns = {'Unnamed: 2': 'Make'}, inplace = True)
@@ -216,6 +232,7 @@ print("\nChoice_data subset after changing number of obs:\n", choice_data_subset
 
 # Converting from panadas dataframes into excel-files
 afgiftspligtig_data.to_excel(path + 'afgiftspligtig_data.xlsx', index = False)
+markedsandele_data.to_excel(path + 'markedsandele_data.xlsx', index = False)
 kmL_data.to_csv(path + 'kmL_data.csv', index = False)
 combined_data.to_excel(path + 'combined_data.xlsx', index = False)
 choice_data_subset.to_excel(path + 'choice_data_subset.xlsx', index = False)

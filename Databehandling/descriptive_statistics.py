@@ -15,45 +15,8 @@ print("choice_data:\n", choice_data)
 afgiftspligtig_data = pd.read_excel(path + 'afgiftspligtig_data.xlsx')
 print("afgiftspligtig_data:\n", afgiftspligtig_data)
 
-# MAKING drivkraft EFFICIENCY PLOT
-fe_data = kmL_data[['aargang', 'kmL', 'drivkraft']].set_index(['drivkraft'])
-print("\nFE data for plotting:\n", fe_data)
-
-fe_el_data = fe_data.loc['El']
-fe_el_means = fe_el_data.groupby('aargang')['kmL'].mean()
-print("\nFE EL means:\n", fe_el_means)
-
-fe_benzin_data = fe_data.loc['Benzin']
-fe_benzin_means = fe_benzin_data.groupby('aargang')['kmL'].mean()
-print("\nFE Benzin means:\n", fe_benzin_means)
-
-fe_diesel_data = fe_data.loc['Diesel']
-fe_diesel_means = fe_diesel_data.groupby('aargang')['kmL'].mean()
-print("\nFE Diesel means:\n", fe_diesel_means)
-
-fig, ax1 = plt.subplots()
-
-ax1.set_xlabel('År')
-ax1.set_ylabel('km (elbiler)', color = 'black') 
-plot_1 = ax1.plot(fe_el_data['aargang'].drop_duplicates().sort_values(), fe_el_means, color = 'green', label = 'El') 
-ax1.tick_params(axis ='y', labelcolor = 'black') 
-ax1.set_ylim([0, 500])
-
-ax2 = ax1.twinx()
-ax2.set_ylabel('km/l (benzin- eller dieselbiler)', color = 'black') 
-plot_2 = ax2.plot(fe_benzin_data['aargang'].drop_duplicates().sort_values(), fe_benzin_means, color = 'red', label = 'Benzin') 
-ax2.tick_params(axis ='y', labelcolor = 'black')
-ax2.set_ylim([0, 25])
-
-plot_3 = plt.plot(fe_diesel_data['aargang'].drop_duplicates().sort_values(), fe_diesel_means, color = 'blue', label = 'Diesel') 
-
-lns = plot_1 + plot_2 + plot_3
-labels = [l.get_label() for l in lns]
-
-plt.legend(lns, labels, loc = 0)
-
-ax1.grid()
-plt.show()
+markedsandele_data = pd.read_excel(path + 'markedsandele_data.xlsx')
+print("markedsandele_data:\n", markedsandele_data)
 
 # MAKING SIZE (m3) PLOT
 size_data = choice_data[['Year', 'Size (m3)', 'Fuel']].set_index(['Fuel'])
@@ -165,6 +128,86 @@ plt.ylabel("Afgiftspligtig værdi i DKK")
   
 plt.legend()
 plt.grid()
+plt.show()
+
+# MAKING FUEL EFFICIENCY PLOT
+fe_data = kmL_data[['aargang', 'kmL', 'drivkraft']].set_index(['drivkraft'])
+print("\nFE data for plotting:\n", fe_data)
+
+fe_el_data = fe_data.loc['El']
+fe_el_means = fe_el_data.groupby('aargang')['kmL'].mean()
+print("\nFE EL means:\n", fe_el_means)
+
+fe_benzin_data = fe_data.loc['Benzin']
+fe_benzin_means = fe_benzin_data.groupby('aargang')['kmL'].mean()
+print("\nFE Benzin means:\n", fe_benzin_means)
+
+fe_diesel_data = fe_data.loc['Diesel']
+fe_diesel_means = fe_diesel_data.groupby('aargang')['kmL'].mean()
+print("\nFE Diesel means:\n", fe_diesel_means)
+
+fig, ax1 = plt.subplots()
+
+ax1.set_xlabel('År')
+ax1.set_ylabel('km (elbiler)', color = 'black') 
+plot_1 = ax1.plot(fe_el_data['aargang'].drop_duplicates().sort_values(), fe_el_means, color = 'green', label = 'El') 
+ax1.tick_params(axis ='y', labelcolor = 'black') 
+ax1.set_ylim([0, 500])
+
+ax2 = ax1.twinx()
+ax2.set_ylabel('km/l (benzin- eller dieselbiler)', color = 'black') 
+plot_2 = ax2.plot(fe_benzin_data['aargang'].drop_duplicates().sort_values(), fe_benzin_means, color = 'red', label = 'Benzin') 
+ax2.tick_params(axis ='y', labelcolor = 'black')
+ax2.set_ylim([0, 25])
+
+plot_3 = plt.plot(fe_diesel_data['aargang'].drop_duplicates().sort_values(), fe_diesel_means, color = 'blue', label = 'Diesel') 
+
+lns = plot_1 + plot_2 + plot_3
+labels = [l.get_label() for l in lns]
+
+plt.legend(lns, labels, loc = 0)
+
+ax1.grid()
+plt.show()
+
+# MAKING Markedsandele
+markedsandele_data = markedsandele_data[['Year', 'Markedsandele', 'Fuel']].set_index(['Fuel'])
+print("\nMarkedsandele data for plotting:\n", markedsandele_data)
+
+markedsandele_el_data = markedsandele_data.loc['El']
+markedsandele_el_means = markedsandele_el_data.groupby('Year')['Markedsandele'].sum()
+print("\nMarkedsandele EL means:\n", markedsandele_el_means)
+
+markedsandele_benzin_data = markedsandele_data.loc['Benzin']
+markedsandele_benzin_means = markedsandele_benzin_data.groupby('Year')['Markedsandele'].sum()
+print("\nMarkedsandele Benzin means :\n", markedsandele_benzin_means)
+
+markedsandele_diesel_data = markedsandele_data.loc['Diesel']
+markedsandele_diesel_means = markedsandele_diesel_data.groupby('Year')['Markedsandele'].sum()
+print("\nMarkedsandele Diesel means :\n", markedsandele_diesel_means)
+
+fig, ax1 = plt.subplots()
+
+ax1.set_xlabel('År')
+ax1.set_ylabel('Markedsandele (elbiler)', color = 'black') 
+plot_1 = ax1.plot(markedsandele_el_data['Year'].drop_duplicates(), markedsandele_el_means, color = 'g', label = 'El')
+ax1.tick_params(axis ='y', labelcolor = 'black') 
+ax1.set_ylim([0.0, 0.10])
+
+ax2 = ax1.twinx()
+ax2.set_ylabel('Markedsandele (benzin- eller dieselbiler)', color = 'black') 
+plot_2 = ax2.plot(markedsandele_benzin_data['Year'].drop_duplicates(), markedsandele_benzin_means, color = 'r', label = 'Benzin')
+ax2.tick_params(axis ='y', labelcolor = 'black')
+ax2.set_ylim([0.0, 1.0])
+
+plot_3 = plt.plot(markedsandele_diesel_data['Year'].drop_duplicates(), markedsandele_diesel_means, color = 'b', label = 'Diesel')
+
+lns = plot_1 + plot_2 + plot_3
+labels = [l.get_label() for l in lns]
+
+plt.legend(lns, labels, loc = 0)
+
+ax1.grid()
 plt.show()
 
 # MAKING WEIGHT (kg) PLOT
