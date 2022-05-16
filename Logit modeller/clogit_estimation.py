@@ -12,29 +12,16 @@ dataset = pd.read_excel(path + 'choice_data_subset.xlsx')
 #dataset['Fuel'].replace(['El', 'Benzin', 'Diesel'], [0, 1, 2], inplace = True)
 #dataset['Size segment'].replace(['Small', 'Large'], [0, 1], inplace = True)
 
-attributes = ['Prices (2015-DKK)', 'Weight (kg)', 'Engine effect (kW)', 'Size (m3)', 'Cost/km (DKK)', 'Ownership cost (DKK)']
+attributes = ['Prices (2015-DKK)', 'Weight (kg)', 'Engine effect (kW)', 'Size (m3)', 'Cost/km (DKK)']
 
 N = dataset.Year.nunique()
 J = dataset[['Year', 'key']].groupby('Year').count().min().tolist()[0]
-
-# Making the variable 'Shares'
-aarstal = dataset['Year'].drop_duplicates()
-dataset['Shares'] = dataset['No. of registrations']
-for aar in aarstal:
-    reg_sum = dataset[['Year', 'No. of registrations']].set_index("Year").loc[aar].sum()[0]
-    shares = (dataset[['Year', 'Shares']].set_index("Year").loc[aar] / reg_sum).values
-    for i in range(0, J):
-        car_i = dataset.set_index("Year").loc[aar].iloc[i]
-        index = dataset.index
-        condition = dataset['key'] == car_i.loc['key']
-        row = index[condition].tolist()[0]
-        dataset.loc[row, 'Shares'] = shares[i][0]
 
 # Changing the measure of 'Prices (2015-DKK)' into 100000 kr.
 dataset['Prices (2015-DKK)'] = dataset['Prices (2015-DKK)'] / 100000
 
 # Changing the measure of 'Ownership cost (DKK)' into 100000 kr.
-dataset['Ownership cost (DKK)'] = dataset['Ownership cost (DKK)'] / 100000
+#dataset['Ownership cost (DKK)'] = dataset['Ownership cost (DKK)'] / 100000
 
 # Changing the measure of 'Weight (kg)' into tons
 dataset['Weight (kg)'] = dataset['Weight (kg)'] / 1000
@@ -58,7 +45,7 @@ def get_x_y(dataset, dummyvar = None, attributes = []):
         x_dummies = []
         x = x_attributes.reshape(N, J, -1)
     
-    y = dataset['Shares'].values.reshape(N, J)
+    y = dataset['Markedsandele'].values.reshape(N, J)
     
     return x, y, x_vars
 
@@ -73,13 +60,13 @@ print("Variablerne:", x_vars, "\n")
 #print("x: \n", x)
 print("X's shape:", x.shape, "\n")
 
-print("y (variablen 'Shares'): \n", y)
+print("y (variablen 'Markedsandele'): \n", y)
 print("y's shape:", y.shape, "\n")
 
+"""
 thetahat, se = estimation.estimate_m(logit, y, x, method = 'BFGS', cov_type = 'Sandwich', options = {'disp':True, 'maxiter':10_000}, tol = 1e-8)
 t_values = thetahat / se
 
-"""
 tab1 = pd.DataFrame({'Coefficients' : thetahat, 'se' : se, 't-values' : t_values}, index = x_vars)
 tab1.loc['Q', 'Coefficients'] = np.mean(logit.q(thetahat, y, x))
 tab1.loc['Q', 'se'] = ' '
