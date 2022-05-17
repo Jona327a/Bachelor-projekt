@@ -3,9 +3,9 @@ import pandas as pd
 
 def q(theta, y, x): 
     '''q(theta,y,x): criterion function: L2 error'''
-    assert theta.ndim == 1
-    assert y.ndim == 2 
+    assert theta.ndim == 1 
     assert x.ndim == 3 
+    assert y.ndim == 2
 
     N,J,K = x.shape 
     assert (y.shape[0] == N) and (y.shape[1] == J), 'y and x do not conform '

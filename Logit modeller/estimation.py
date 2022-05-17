@@ -33,7 +33,7 @@ def estimate(
         cov_type='Outer Product',
         options = {'disp': True},
         **kwargs
-    ) -> dict:
+    ):
     """Takes a function and returns the minimum, given start values and 
     variables to calculate the residuals.
 
@@ -99,7 +99,7 @@ def variance(
         thetahat: np.ndarray,
         cov_type: str,
         hess_inv=None 
-    ) -> tuple:
+    ):
     """Calculates the variance for the likelihood function.
 
     Args:
@@ -150,7 +150,7 @@ def variance(
     return cov, se
 
 
-def centered_grad(f, x0: np.ndarray, h:float=1.49e-08) -> np.ndarray:
+def centered_grad(f, x0: np.ndarray, h:float=1.49e-08):
     '''centered_grad: numerical gradient calculator
     Args.
         f: function handle taking *one* input, f(x0). f can return a vector. 
@@ -192,7 +192,7 @@ def centered_grad(f, x0: np.ndarray, h:float=1.49e-08) -> np.ndarray:
 
 
 
-def hessian( fhandle , x0 , h=1e-5 ) -> np.ndarray: 
+def hessian( fhandle , x0 , h=1e-5 ): 
     '''hessian(): computes the (K,K) matrix of 2nd partial derivatives
         using the aggregation "sum" (i.e. consider dividing by N)
 
@@ -283,7 +283,7 @@ def print_table(
         headers:list = ["", "Beta", "Se", "t-values"],
         title:str = "Results",
         num_decimals:int = 4
-    ) -> pd.core.frame.DataFrame:
+    ):
     """Prints a nice looking table, must at least have coefficients, 
     standard errors and t-values. The number of coefficients must be the
     same length as the labels.
@@ -303,7 +303,7 @@ def print_table(
     tab = pd.DataFrame({
        'theta': results['theta_hat'], 
         'se': results['se'], 
-        't': results['t_values']
+        't': results['t']
         }, index=theta_label)
     
     if num_decimals is not None: 
