@@ -88,3 +88,30 @@ plt.scatter(y, ccp, alpha=0.1)
 plt.plot(np.array([y.min(), y.max()]), np.array([ccp.min(), ccp.max()]), 'r')
 plt.xlabel('Observed shares');
 plt.ylabel('Predicted shares');
+
+#%% Kørsel 
+pkm0 = x[:,:,4]
+
+def predict_driving(theta, x, pfuel_relative=1.0, gamma_fuel=-22.5, idx_pkm = 4, p_km_baseline = pkm0):
+    ccp = logit.choice_prob(theta, x)
+    p_km = x[:,:,idx_pkm]*pfuel_relative
+    km = 45.0 + (p_km - p_km_baseline)*gamma_fuel
+    km_per_car = km * ccp 
+    return km_per_car
+
+# test elasticity 
+km0 = predict_driving(res['theta_hat'], x)
+km1 = predict_driving(res['theta_hat'], x, pfuel_relative=1.01)
+diff = km1/km0 - 1.0
+print(f'Elasticity: {np.mean(np.abs(diff))/0.01 : 5.2%}')
+
+# task: pick gamma_fuel (unknown parameter) so that the elasticity is as close as possible to some value you find in the literature (e.g. Gillingham & Munk-Nielsen, 2019)
+
+# %% miljø
+def predict_co2(theta, x, p_fuel_relative=1.0, gamma_fuel=-22.5): 
+    km = predict_driving()
+    km_per_liter = dataset['kmliter'].values 
+    liters = km/km_per_liter
+    co2_per_liter = 2.3 # kg CO2 per liter; for diesel 2.7kg
+    co2 = liters*co2_per_liter
+    return co2 
