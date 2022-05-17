@@ -1,3 +1,4 @@
+#%%
 import numpy as np
 import pandas as pd
 import estimation
@@ -5,6 +6,7 @@ import logit
 
 pd.options.display.float_format = '{:.6f}'.format
 path = "/Users/frederikluneborgholmjeppesen/Documents/Universitetet/3. år/Bachelorprojektet/MotorRegisterData-main/"
+path = '../Data/'
 
 # NOTICE: remember to choose the correct dataset
 dataset = pd.read_excel(path + 'choice_data_subset.xlsx')
@@ -18,7 +20,7 @@ N = dataset.Year.nunique()
 J = dataset[['Year', 'key']].groupby('Year').count().min().tolist()[0]
 
 # Changing the measure of 'Prices (2015-DKK)' into 100000 kr.
-dataset['Prices (2015-DKK)'] = dataset['Prices (2015-DKK)'] / 100000
+dataset['Prices (2015-DKK)'] = np.log(dataset['Prices (2015-DKK)'] / 100000)
 
 # Changing the measure of 'Ownership cost (DKK)' into 100000 kr.
 #dataset['Ownership cost (DKK)'] = dataset['Ownership cost (DKK)'] / 100000
@@ -78,3 +80,11 @@ theta0 = logit.starting_values(y, x)
 res = estimation.estimate(logit.q, theta0, y, x, cov_type = 'Sandwich', method = 'BFGS', options = {'disp':True, 'maxiter':10_000}, tol = 1e-8)
 tab2 = pd.DataFrame({'Coefficients' : res['theta_hat'], 'se' : res['se'], 't-values' : res['t']}, index = x_vars)
 print("\n", tab2)
+
+#%% compare observed and predicted shares 
+ccp = logit.choice_prob(res['theta_hat'], x)
+
+plt.scatter(y, ccp, alpha=0.1)
+plt.plot(np.array([y.min(), y.max()]), np.array([ccp.min(), ccp.max()]), 'r')
+plt.xlabel('Observed shares');
+plt.ylabel('Predicted shares');
