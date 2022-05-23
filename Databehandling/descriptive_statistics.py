@@ -6,8 +6,8 @@ pd.options.display.float_format = '{:.4f}'.format
 path = "/Users/frederikluneborgholmjeppesen/Documents/Universitetet/3. år/Bachelorprojektet/MotorRegisterData-main/"
 
 # Loading the datasets
-kmL_data = pd.read_csv(path + 'kmL_data.csv', delimiter = ',', encoding = 'unicode_escape')
-print("kmL_data:\n", kmL_data)
+bilbasen_data_subset = pd.read_csv(path + 'bilbasen_data_subset.csv', delimiter = ',', encoding = 'unicode_escape')
+print("bilbasen_data_subset:\n", bilbasen_data_subset)
 
 choice_data = pd.read_csv(path + 'choice_data.csv', delimiter = ';', encoding = 'unicode_escape')
 print("choice_data:\n", choice_data)
@@ -131,7 +131,7 @@ plt.grid()
 plt.show()
 
 # MAKING FUEL EFFICIENCY PLOT
-fe_data = kmL_data[['aargang', 'kmL', 'drivkraft']].set_index(['drivkraft'])
+fe_data = bilbasen_data_subset[['aargang', 'kmL', 'drivkraft']].set_index(['drivkraft'])
 print("\nFE data for plotting:\n", fe_data)
 
 fe_el_data = fe_data.loc['El']
