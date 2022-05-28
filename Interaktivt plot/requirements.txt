@@ -1,6 +1,7 @@
 matplotlib==3.4.1
 pandas==1.4.2
 ipywidgets==7.7.0
+numpy==1.20.2
 requests==2.25.0
 io==unknown
 import_ipynb==0.1.4
