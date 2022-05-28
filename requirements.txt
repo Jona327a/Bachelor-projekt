@@ -4,4 +4,5 @@ ipywidgets==7.7.0
 numpy==1.21.6
 requests==2.27.1
 import_ipynb==0.1.4
+openpyxl==3.0.7
 watermark==2.3.1
