@@ -2,12 +2,17 @@ import numpy as np
 import pandas as pd
 import estimation
 import logit
+import requests as rq
+from io import BytesIO
 
 pd.options.display.float_format = '{:.4f}'.format
-path = "/Users/frederikluneborgholmjeppesen/Documents/Universitetet/3. år/Bachelorprojektet/MotorRegisterData-main/"
+#path = "/Users/frederikluneborgholmjeppesen/Documents/Universitetet/3. år/Bachelorprojektet/MotorRegisterData-main/"
+path = "https://raw.githubusercontent.com/Jona327a/Bachelor-projekt/main/Data/choice_data_subset.xlsx"
 
 # NOTICE: remember to choose the correct dataset
-dataset = pd.read_excel(path + 'choice_data_subset.xlsx')
+#dataset = pd.read_excel(path + 'choice_data_subset.xlsx')
+data = rq.get(path).content
+dataset = pd.read_excel(BytesIO(data))
 
 #attributes = ['Prices (2015-DKK)', 'Weight (kg)', 'Engine effect (kW)', 'Size (m3)', 'Cost/km (DKK)']
 attributes = ['Prices (2015-DKK)', 'Weight (kg)', 'Engine effect (kW)', 'Size (m3)']
