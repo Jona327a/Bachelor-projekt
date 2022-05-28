@@ -5,5 +5,4 @@ numpy==1.22.4
 requests==2.27.1
 io==unknown
 import_ipynb==0.1.4
-interactive_plot_code==(7, 7, 0, 'final', 0)
 watermark==2.3.1
