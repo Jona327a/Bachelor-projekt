@@ -175,32 +175,32 @@ markedsandele_data = markedsandele_data[['Year', 'Markedsandele', 'Fuel']].set_i
 print("\nMarkedsandele data for plotting:\n", markedsandele_data)
 
 markedsandele_el_data = markedsandele_data.loc['El']
-markedsandele_el_means = markedsandele_el_data.groupby('Year')['Markedsandele'].sum()
-print("\nMarkedsandele EL means:\n", markedsandele_el_means)
+markedsandele_el_sum = markedsandele_el_data.groupby('Year')['Markedsandele'].sum()
+print("\nMarkedsandele EL means:\n", markedsandele_el_sum)
 
 markedsandele_benzin_data = markedsandele_data.loc['Benzin']
-markedsandele_benzin_means = markedsandele_benzin_data.groupby('Year')['Markedsandele'].sum()
-print("\nMarkedsandele Benzin means :\n", markedsandele_benzin_means)
+markedsandele_benzin_sum = markedsandele_benzin_data.groupby('Year')['Markedsandele'].sum()
+print("\nMarkedsandele Benzin means :\n", markedsandele_benzin_sum)
 
 markedsandele_diesel_data = markedsandele_data.loc['Diesel']
-markedsandele_diesel_means = markedsandele_diesel_data.groupby('Year')['Markedsandele'].sum()
-print("\nMarkedsandele Diesel means :\n", markedsandele_diesel_means)
+markedsandele_diesel_sum = markedsandele_diesel_data.groupby('Year')['Markedsandele'].sum()
+print("\nMarkedsandele Diesel means :\n", markedsandele_diesel_sum)
 
 fig, ax1 = plt.subplots()
 
 ax1.set_xlabel('År')
 ax1.set_ylabel('Markedsandele (elbiler)', color = 'black') 
-plot_1 = ax1.plot(markedsandele_el_data['Year'].drop_duplicates(), markedsandele_el_means, color = 'g', label = 'El')
+plot_1 = ax1.plot(markedsandele_el_data['Year'].drop_duplicates(), markedsandele_el_sum, color = 'g', label = 'El')
 ax1.tick_params(axis ='y', labelcolor = 'black') 
 ax1.set_ylim([0.0, 0.10])
 
 ax2 = ax1.twinx()
 ax2.set_ylabel('Markedsandele (benzin- eller dieselbiler)', color = 'black') 
-plot_2 = ax2.plot(markedsandele_benzin_data['Year'].drop_duplicates(), markedsandele_benzin_means, color = 'r', label = 'Benzin')
+plot_2 = ax2.plot(markedsandele_benzin_data['Year'].drop_duplicates(), markedsandele_benzin_sum, color = 'r', label = 'Benzin')
 ax2.tick_params(axis ='y', labelcolor = 'black')
 ax2.set_ylim([0.0, 1.0])
 
-plot_3 = plt.plot(markedsandele_diesel_data['Year'].drop_duplicates(), markedsandele_diesel_means, color = 'b', label = 'Diesel')
+plot_3 = plt.plot(markedsandele_diesel_data['Year'].drop_duplicates(), markedsandele_diesel_sum, color = 'b', label = 'Diesel')
 
 lns = plot_1 + plot_2 + plot_3
 labels = [l.get_label() for l in lns]
