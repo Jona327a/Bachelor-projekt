@@ -6,16 +6,13 @@ import requests as rq
 from io import BytesIO
 
 pd.options.display.float_format = '{:.4f}'.format
-#path = "/Users/frederikluneborgholmjeppesen/Documents/Universitetet/3. år/Bachelorprojektet/MotorRegisterData-main/"
 path = "https://raw.githubusercontent.com/Jona327a/Bachelor-projekt/main/Data/choice_data_subset.xlsx"
 
-# NOTICE: remember to choose the correct dataset
-#dataset = pd.read_excel(path + 'choice_data_subset.xlsx')
 data = rq.get(path).content
 dataset = pd.read_excel(BytesIO(data))
 
-#attributes = ['Prices (2015-DKK)', 'Weight (kg)', 'Engine effect (kW)', 'Size (m3)', 'Cost/km (DKK)']
-attributes = ['Prices (2015-DKK)', 'Weight (kg)', 'Engine effect (kW)', 'Size (m3)']
+attributes = ['Prices (2015-DKK)', 'Weight (kg)', 'Engine effect (kW)', 'Size (m3)', 'Cost/km (DKK)']
+#attributes = ['Prices (2015-DKK)', 'Weight (kg)', 'Engine effect (kW)', 'Size (m3)']
 #attributes = ['Prices (2015-DKK)', 'Weight (kg)']
 
 N = dataset.Year.nunique()
@@ -52,17 +49,10 @@ def get_x_y(dataset, N, J, dummyvar = None, attributes = []):
 
 x, y, x_vars = get_x_y(dataset = dataset, dummyvar = None, N = N, J = J, attributes = attributes)
 
-print("Dataset: \n", dataset, "\n")
 print("N:", N, "forskellige årstal")
 print("J:", J, "alternativer")
 print("K:", len(x_vars), "variabler")
 print("Variablerne:", x_vars, "\n")
-
-print("x: \n", x)
-print("X's shape:", x.shape, "\n")
-
-print("y (variablen 'Markedsandele'): \n", y)
-print("y's shape:", y.shape, "\n")
 
 def clogt_estimation(x, y, x_vars):
     theta0 = logit.starting_values(y, x)
@@ -73,7 +63,6 @@ def clogt_estimation(x, y, x_vars):
     return res
 clogt_estimation(x = x, y = y, x_vars = x_vars)
 
-"""
 thetahat, se = estimation.estimate_m(logit, y, x, method = 'BFGS', cov_type = 'Sandwich', options = {'disp':True, 'maxiter':10_000}, tol = 1e-8)
 t_values = thetahat / se
 
@@ -82,4 +71,3 @@ tab1.loc['Q', 'Coefficients'] = np.mean(logit.q(thetahat, y, x))
 tab1.loc['Q', 'se'] = ' '
 tab1.loc['Q', 't-values'] = ' '
 print("\n", tab1)
-"""
