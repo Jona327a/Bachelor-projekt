@@ -1,2 +1,2 @@
 # Bachelor-projekt
-Denne Github indeholder alt vores data, databehandling og kode, som er brugt til vores bachelorprojekt
+Denne Github indeholder al data og kode, som er brugt til vores bachelorprojekt
