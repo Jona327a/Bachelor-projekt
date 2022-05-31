@@ -62,12 +62,3 @@ def clogt_estimation(x, y, x_vars):
     #print("\n", table)
     return res
 clogt_estimation(x = x, y = y, x_vars = x_vars)
-
-thetahat, se = estimation.estimate_m(logit, y, x, method = 'BFGS', cov_type = 'Sandwich', options = {'disp':True, 'maxiter':10_000}, tol = 1e-8)
-t_values = thetahat / se
-
-tab1 = pd.DataFrame({'Coefficients' : thetahat, 'se' : se, 't-values' : t_values}, index = x_vars)
-tab1.loc['Q', 'Coefficients'] = np.mean(logit.q(thetahat, y, x))
-tab1.loc['Q', 'se'] = ' '
-tab1.loc['Q', 't-values'] = ' '
-print("\n", tab1)
