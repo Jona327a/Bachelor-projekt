@@ -55,63 +55,31 @@ def new_prices(rate_1, rate_2, rate_3, reg_beløb_1, reg_beløb_2, bundfradrag, 
             new_prices.append(new_price)
     return new_prices
 
-reg_afgift_increase = new_prices(rate_1 = 0.25, rate_2 = 0.85, rate_3 = 1.5, reg_beløb_1 = 77094.65, reg_beløb_2 = 239721.34, bundfradrag = 25658.84, el_bundfradrag_1 = 147500.0, el_fradrag_2 = 0.0, indfasning = 0.80)
+#2030 registreringsafgift
+#reg_afgift_increase = new_prices(rate_1 = 0.25, rate_2 = 0.85, rate_3 = 1.5, reg_beløb_1 = 77094.65, reg_beløb_2 = 239721.34, bundfradrag = 25660.0, el_bundfradrag_1 = 137000.0, el_fradrag_2 = 0.0, indfasning = 0.80)
+
+#2025 registreringsafgift
+#reg_afgift_increase = new_prices(rate_1 = 0.25, rate_2 = 0.85, rate_3 = 1.5, reg_beløb_1 = 69827.0, reg_beløb_2 = 217123.0, bundfradrag = 23241.0, el_bundfradrag_1 = 160000.0, el_fradrag_2 = 0.0, indfasning = 0.40)
+
+#2020 registreringsafgift
+reg_afgift_increase = new_prices(rate_1 = 0.25, rate_2 = 0.85, rate_3 = 1.5, reg_beløb_1 = 65000.0, reg_beløb_2 = 202200.0, bundfradrag = 21700.0, el_bundfradrag_1 = 170000.0, el_fradrag_2 = 1700.0, indfasning = 0.40)
+
 data_set = data_set.assign(new_prices = reg_afgift_increase)
 new_prices = data_set['new_prices']
 skatteprovenu_new_prices = skatteprovenu(new_prices)
 data_set = data_set.assign(skatteprovenu_new_prices = skatteprovenu_new_prices)
-
-print("\n'Prices (2015-DKK)', 'new_prices', 'afgiftspligtig_værdi':\n", data_set[['Prices (2015-DKK)', 'new_prices', 'afgiftspligtig_værdi']])
 
 skatteprovenu_new_prices_data = data_set[['Year', 'skatteprovenu_new_prices', 'Fuel']].set_index(['Fuel'])
 skatteprovenu_original_prices_data = data_set[['Year', 'skatteprovenu_original_prices', 'Fuel']].set_index(['Fuel'])
 
 skatteprovenu_new_prices_benzin_data = skatteprovenu_new_prices_data.loc['Benzin']
 skatteprovenu_new_prices_benzin_sum = skatteprovenu_new_prices_benzin_data.groupby('Year')['skatteprovenu_new_prices'].sum()
-print("\nSkatteprovenu af new_prices for benzinbiler:\n", skatteprovenu_new_prices_benzin_sum)
-skatteprovenu_original_prices_benzin_data = skatteprovenu_original_prices_data.loc['Benzin']
-skatteprovenu_original_prices_benzin_sum = skatteprovenu_original_prices_benzin_data.groupby('Year')['skatteprovenu_original_prices'].sum()
-print("\nSkatteprovenu af original prices for benzinbiler:\n", skatteprovenu_original_prices_benzin_sum)
-print("\nProcentmæssig ændring for benzinbiler:\n", (skatteprovenu_new_prices_benzin_sum - skatteprovenu_original_prices_benzin_sum) * 100 / skatteprovenu_original_prices_benzin_sum)
+print("\nSkatteprovenu af new_prices for benzinbiler:\n", (skatteprovenu_new_prices_benzin_sum.sum() / 1000) / 15 )
 
 skatteprovenu_new_prices_diesel_data = skatteprovenu_new_prices_data.loc['Diesel']
 skatteprovenu_new_prices_diesel_sum = skatteprovenu_new_prices_diesel_data.groupby('Year')['skatteprovenu_new_prices'].sum()
-print("\nSkatteprovenu af new_prices for dieselbiler:\n", skatteprovenu_new_prices_diesel_sum)
-skatteprovenu_original_prices_diesel_data = skatteprovenu_original_prices_data.loc['Diesel']
-skatteprovenu_original_prices_diesel_sum = skatteprovenu_original_prices_diesel_data.groupby('Year')['skatteprovenu_original_prices'].sum()
-print("\nSkatteprovenu af original prices for dieselbiler:\n", skatteprovenu_original_prices_diesel_sum)
-print("\nProcentmæssig ændring for dieselbiler:\n", (skatteprovenu_new_prices_diesel_sum - skatteprovenu_original_prices_diesel_sum) * 100 / skatteprovenu_original_prices_diesel_sum)
+print("\nSkatteprovenu af new_prices for dieselbiler:\n", (skatteprovenu_new_prices_diesel_sum.sum() / 1000) / 15 )
 
 skatteprovenu_new_prices_el_data = skatteprovenu_new_prices_data.loc['El']
 skatteprovenu_new_prices_el_sum = skatteprovenu_new_prices_el_data.groupby('Year')['skatteprovenu_new_prices'].sum()
-print("\nSkatteprovenu af new_prices for elbiler:\n", skatteprovenu_new_prices_el_sum)
-skatteprovenu_original_prices_el_data = skatteprovenu_original_prices_data.loc['El']
-skatteprovenu_original_prices_el_sum = skatteprovenu_original_prices_el_data.groupby('Year')['skatteprovenu_original_prices'].sum()
-print("\nSkatteprovenu af original prices for elbiler:\n", skatteprovenu_original_prices_el_sum)
-print("\nProcentmæssig ændring for elbiler:\n", (skatteprovenu_new_prices_el_sum - skatteprovenu_original_prices_el_sum) * 100 / skatteprovenu_original_prices_el_sum)
-
-fig, ax1 = plt.subplots()
-
-ax1.set_xlabel('År')
-pc = (skatteprovenu_new_prices_el_sum - skatteprovenu_original_prices_el_sum) * 100 / skatteprovenu_original_prices_el_sum
-plot_1 = ax1.plot(skatteprovenu_original_prices_el_data['Year'].drop_duplicates().sort_values(), pc, color = 'b', label = 'Procentmæssig ændring')
-ax1.yaxis.set_major_formatter(mtick.PercentFormatter())
-ax1.set_ylim([-17.5, 0])
-
-ax2 = ax1.twinx()
-ax2.set_ylabel('DKK', color = 'black') 
-plot_2 = ax2.plot(skatteprovenu_original_prices_el_data['Year'].drop_duplicates(), skatteprovenu_original_prices_el_sum, color = 'g', label = 'Originale elbil priser', linestyle = 'dashed')
-ax2.ticklabel_format(style = 'plain')
-ax2.get_yaxis().set_major_formatter(mpl.ticker.FuncFormatter(lambda x, p: format(int(x), ',')))
-
-plot_3 = plt.plot(skatteprovenu_new_prices_el_data['Year'].drop_duplicates(), skatteprovenu_new_prices_el_sum, color = 'y', label = 'Nye elbil priser')
-
-plt.title("Samlet årligt skatteprovenu for elbiler")
-
-lns = plot_1 + plot_2 + plot_3
-labels = [l.get_label() for l in lns]
-
-plt.legend(lns, labels, loc = 2)
-
-ax1.grid()
-plt.show()
+print("\nSkatteprovenu af new_prices for elbiler:\n", (skatteprovenu_new_prices_el_sum.sum() / 1000) / 15)
