@@ -49,11 +49,6 @@ def get_x_y(dataset, N, J, dummyvar = None, attributes = []):
 
 x, y, x_vars = get_x_y(dataset = dataset, dummyvar = None, N = N, J = J, attributes = attributes)
 
-print("N:", N, "forskellige årstal")
-print("J:", J, "alternativer")
-print("K:", len(x_vars), "variabler")
-print("Variablerne:", x_vars, "\n")
-
 def clogt_estimation(x, y, x_vars):
     theta0 = logit.starting_values(y, x)
     res = estimation.estimate(logit.q, theta0, y, x, cov_type = 'Sandwich', method = 'BFGS', options = {'disp':True, 'maxiter':10_000}, tol = 1e-8)
