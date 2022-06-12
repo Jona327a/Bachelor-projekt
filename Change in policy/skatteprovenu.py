@@ -1,10 +1,7 @@
 import pandas as pd
-import matplotlib.pyplot as plt
 import afgiftspligtig_værdi as av
 import requests as rq
 from io import BytesIO
-import matplotlib.ticker as mtick
-import matplotlib as mpl
 
 pd.options.display.float_format = '{:.4f}'.format
 path = "https://raw.githubusercontent.com/Jona327a/Bachelor-projekt/main/Data/choice_data_subset.xlsx"
@@ -29,10 +26,6 @@ def skatteprovenu(car_prices):
             skatteprovenu_lst.append(skatteprovenu)
     return skatteprovenu_lst
 
-original_prices = data_set['Prices (2015-DKK)']
-skatteprovenu_original_prices = skatteprovenu(original_prices)
-data_set = data_set.assign(skatteprovenu_original_prices = skatteprovenu_original_prices)
-
 def new_prices(rate_1, rate_2, rate_3, reg_beløb_1, reg_beløb_2, bundfradrag, el_bundfradrag_1, el_fradrag_2, indfasning):
     new_prices = []
     for i in range(0, data_set.shape[0]):
@@ -56,13 +49,13 @@ def new_prices(rate_1, rate_2, rate_3, reg_beløb_1, reg_beløb_2, bundfradrag, 
     return new_prices
 
 #2030 registreringsafgift
-#reg_afgift_increase = new_prices(rate_1 = 0.25, rate_2 = 0.85, rate_3 = 1.5, reg_beløb_1 = 77094.65, reg_beløb_2 = 239721.34, bundfradrag = 25660.0, el_bundfradrag_1 = 137000.0, el_fradrag_2 = 0.0, indfasning = 0.80)
+reg_afgift_increase = new_prices(rate_1 = 0.25, rate_2 = 0.85, rate_3 = 1.5, reg_beløb_1 = 77094.65, reg_beløb_2 = 239721.34, bundfradrag = 25660.0, el_bundfradrag_1 = 137000.0, el_fradrag_2 = 0.0, indfasning = 0.80)
 
 #2025 registreringsafgift
 #reg_afgift_increase = new_prices(rate_1 = 0.25, rate_2 = 0.85, rate_3 = 1.5, reg_beløb_1 = 69827.0, reg_beløb_2 = 217123.0, bundfradrag = 23241.0, el_bundfradrag_1 = 160000.0, el_fradrag_2 = 0.0, indfasning = 0.40)
 
 #2020 registreringsafgift
-reg_afgift_increase = new_prices(rate_1 = 0.25, rate_2 = 0.85, rate_3 = 1.5, reg_beløb_1 = 65000.0, reg_beløb_2 = 202200.0, bundfradrag = 21700.0, el_bundfradrag_1 = 170000.0, el_fradrag_2 = 1700.0, indfasning = 0.40)
+#reg_afgift_increase = new_prices(rate_1 = 0.25, rate_2 = 0.85, rate_3 = 1.5, reg_beløb_1 = 65000.0, reg_beløb_2 = 202200.0, bundfradrag = 21700.0, el_bundfradrag_1 = 170000.0, el_fradrag_2 = 1700.0, indfasning = 0.40)
 
 data_set = data_set.assign(new_prices = reg_afgift_increase)
 new_prices = data_set['new_prices']
@@ -70,7 +63,6 @@ skatteprovenu_new_prices = skatteprovenu(new_prices)
 data_set = data_set.assign(skatteprovenu_new_prices = skatteprovenu_new_prices)
 
 skatteprovenu_new_prices_data = data_set[['Year', 'skatteprovenu_new_prices', 'Fuel']].set_index(['Fuel'])
-skatteprovenu_original_prices_data = data_set[['Year', 'skatteprovenu_original_prices', 'Fuel']].set_index(['Fuel'])
 
 skatteprovenu_new_prices_benzin_data = skatteprovenu_new_prices_data.loc['Benzin']
 skatteprovenu_new_prices_benzin_sum = skatteprovenu_new_prices_benzin_data.groupby('Year')['skatteprovenu_new_prices'].sum()
