@@ -3,9 +3,11 @@ import math
 import afgiftspligtig_værdi as av
 
 pd.options.display.float_format = '{:.4f}'.format
+
+# Notice: Remember to change the path!
 path = "/Users/frederikluneborgholmjeppesen/Documents/Universitetet/3. år/Bachelorprojektet/MotorRegisterData-main/"
 
-# Choice Data and Choice Data Subset
+# Loading Choice Data
 choice_data = pd.read_csv(path + 'choice_data.csv', delimiter = ';', encoding = 'unicode_escape')
 choice_data = choice_data.rename(columns = {'Make-model-year-fuel' : 'key'})
 choice_data['key'] = choice_data['key'].str.replace(' ', '-')
@@ -35,7 +37,7 @@ for aar in aarstal:
         choice_data.loc[row, 'Markedsandele'] = shares[i][0]
 markedsandele_data = choice_data[['Year', 'Markedsandele', 'Fuel']]
 
-# BILBASEN SCRAPE
+# Loading dataset from Bilbasen
 bilbasen_data = pd.read_csv(path + 'bilbasen_scrape.csv', delimiter=';', encoding = 'unicode_escape')
 bilbasen_data.rename(columns = {'Unnamed: 2': 'Make'}, inplace = True)
 bilbasen_data.rename(columns = {'Unnamed: 3': 'Model'}, inplace = True)
@@ -47,14 +49,22 @@ bilbasen_data['kmL'] = bilbasen_data['kmL'].str.replace("\(NEDC\)", '')
 bilbasen_data['kmL'] = bilbasen_data['kmL'].str.replace(',', '.')
 bilbasen_data['kmL'] = pd.to_numeric(bilbasen_data['kmL'], errors = 'coerce')
 bilbasen_data['kmL'] = bilbasen_data['kmL'].astype(float)
-bilbasen_data_subset = bilbasen_data[['aargang', 'kmL', 'drivkraft', 'key']]
+bilbasen_data['forbrug (WLTP)'] = bilbasen_data['forbrug (WLTP)'].str.replace('kWh', '')
+bilbasen_data['forbrug (WLTP)'] = bilbasen_data['forbrug (WLTP)'].str.replace('km/l', '')
+bilbasen_data['forbrug (WLTP)'] = bilbasen_data['forbrug (WLTP)'].str.replace(',', '.')
+bilbasen_data['forbrug (WLTP)'] = pd.to_numeric(bilbasen_data['forbrug (WLTP)'], errors = 'coerce')
+bilbasen_data['forbrug (WLTP)'] = bilbasen_data['forbrug (WLTP)'].astype(float)
+bilbasen_data_subset = bilbasen_data[['aargang', 'kmL', 'forbrug (WLTP)', 'drivkraft', 'key']]
 for i in bilbasen_data_subset.index:
     aargang_check = bilbasen_data_subset['aargang'].loc[i]
     kmL_check = math.isnan(bilbasen_data_subset['kmL'].loc[i])
-    if kmL_check == True or aargang_check < 2006:
+    forbrug_check = math.isnan(bilbasen_data_subset['forbrug (WLTP)'].loc[i])
+    drivkraft = bilbasen_data_subset['drivkraft'].loc[i]
+    if kmL_check == True or aargang_check < 2006 or (forbrug_check == True and drivkraft == 'El'):
         bilbasen_data_subset = bilbasen_data_subset.drop(labels = i, axis = 0)
-bilbasen_data_subset = bilbasen_data_subset[['aargang', 'kmL', 'drivkraft']]
+bilbasen_data_subset = bilbasen_data_subset[['aargang', 'kmL', 'forbrug (WLTP)', 'drivkraft']]
 bilbasen_data_subset = bilbasen_data_subset.reset_index(drop = True)
+print(bilbasen_data_subset)
 
 # Making sure that every Year has the same number of observations in Choice Data Subset
 lowest_obs = choice_data_subset[['Year', 'key']].groupby('Year').count().min().tolist()[0]

@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 pd.options.display.float_format = '{:.4f}'.format
+
+# Notice: Remember to change the path!
 path = "/Users/frederikluneborgholmjeppesen/Documents/Universitetet/3. år/Bachelorprojektet/MotorRegisterData-main/"
 
 # Loading the datasets
@@ -51,24 +53,24 @@ price_data = choice_data[['Year', 'Prices (2015-DKK)', 'Fuel']].set_index(['Fuel
 print("\nPrice data for plotting:\n", price_data)
 
 price_el_data = price_data.loc['El']
-price_el_means = price_el_data.groupby('Year')['Prices (2015-DKK)'].mean()
+price_el_means = price_el_data.groupby('Year')['Prices (2015-DKK)'].mean() / 1000
 print("\nPrice EL means:\n", price_el_means)
 
 price_benzin_data = price_data.loc['Benzin']
-price_benzin_means = price_benzin_data.groupby('Year')['Prices (2015-DKK)'].mean()
+price_benzin_means = price_benzin_data.groupby('Year')['Prices (2015-DKK)'].mean() / 1000
 print("\nPrice Benzin means :\n", price_benzin_means)
 
 price_diesel_data = price_data.loc['Diesel']
-price_diesel_means = price_diesel_data.groupby('Year')['Prices (2015-DKK)'].mean()
+price_diesel_means = price_diesel_data.groupby('Year')['Prices (2015-DKK)'].mean() / 1000
 print("\nPrice Diesel means :\n", price_diesel_means)
 
 plt.plot(list(price_el_data['Year'].drop_duplicates()), price_el_means, color = 'g', label = 'El')
 plt.plot(list(price_benzin_data['Year'].drop_duplicates()), price_benzin_means, color = 'r', label = 'Benzin')
 plt.plot(list(price_diesel_data['Year'].drop_duplicates()), price_diesel_means, color = 'b', label = 'Diesel')
-plt.ylim(ymin = 0, ymax = 900000)
+plt.ylim(ymin = 0, ymax = 900)
 
 plt.xlabel("År")
-plt.ylabel("Priser i DKK")
+plt.ylabel("Priser i 1.000 DKK")
   
 plt.legend()
 plt.grid()
@@ -107,24 +109,24 @@ afgiftspligtig_værdi_data = afgiftspligtig_data[['Year', 'afgiftspligtig_værdi
 print("\nAfgiftspligtig_værdi data for plotting:\n", afgiftspligtig_værdi_data)
 
 afgiftspligtig_værdi_el_data = afgiftspligtig_værdi_data.loc['El']
-afgiftspligtig_værdi_el_means = afgiftspligtig_værdi_el_data.groupby('Year')['afgiftspligtig_værdi'].mean()
+afgiftspligtig_værdi_el_means = afgiftspligtig_værdi_el_data.groupby('Year')['afgiftspligtig_værdi'].mean() / 1000
 print("\nAfgiftspligtig_værdi EL means:\n", afgiftspligtig_værdi_el_means)
 
 afgiftspligtig_værdi_benzin_data = afgiftspligtig_værdi_data.loc['Benzin']
-afgiftspligtig_værdi_benzin_means = afgiftspligtig_værdi_benzin_data.groupby('Year')['afgiftspligtig_værdi'].mean()
+afgiftspligtig_værdi_benzin_means = afgiftspligtig_værdi_benzin_data.groupby('Year')['afgiftspligtig_værdi'].mean() / 1000
 print("\nAfgiftspligtig_værdi Benzin means :\n", afgiftspligtig_værdi_benzin_means)
 
 afgiftspligtig_værdi_diesel_data = afgiftspligtig_værdi_data.loc['Diesel']
-afgiftspligtig_værdi_diesel_means = afgiftspligtig_værdi_diesel_data.groupby('Year')['afgiftspligtig_værdi'].mean()
+afgiftspligtig_værdi_diesel_means = afgiftspligtig_værdi_diesel_data.groupby('Year')['afgiftspligtig_værdi'].mean() / 1000
 print("\nAfgiftspligtig_værdi Diesel means :\n", afgiftspligtig_værdi_diesel_means)
 
 plt.plot(list(afgiftspligtig_værdi_el_data['Year'].drop_duplicates()), afgiftspligtig_værdi_el_means, color = 'g', label = 'El')
 plt.plot(list(afgiftspligtig_værdi_benzin_data['Year'].drop_duplicates()), afgiftspligtig_værdi_benzin_means, color = 'r', label = 'Benzin')
 plt.plot(list(afgiftspligtig_værdi_diesel_data['Year'].drop_duplicates()), afgiftspligtig_værdi_diesel_means, color = 'b', label = 'Diesel')
-plt.ylim(ymin = 0, ymax = 900000)
+plt.ylim(ymin = 0, ymax = 900)
 
 plt.xlabel("År")
-plt.ylabel("Afgiftspligtig værdi i DKK")
+plt.ylabel("Afgiftspligtig værdi i 1.000 DKK")
   
 plt.legend()
 plt.grid()
