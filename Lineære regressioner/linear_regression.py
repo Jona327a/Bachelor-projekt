@@ -1,12 +1,14 @@
 import numpy as np
 import pandas as pd
 import LinearModels as LM
+import requests as rq
+from io import BytesIO
 
 pd.options.display.float_format = '{:.4f}'.format
-path = "/Users/frederikluneborgholmjeppesen/Documents/Universitetet/3. år/Bachelorprojektet/MotorRegisterData-main/"
+path = "https://raw.githubusercontent.com/Jona327a/Bachelor-projekt/main/Data/choice_data_subset.xlsx"
 
-# NOTICE: remember to choose the correct dataset
-dataset = pd.read_excel(path + 'choice_data_subset.xlsx')
+data = rq.get(path).content
+dataset = pd.read_excel(BytesIO(data))
 
 # Changing the measure of 'Prices (2015-DKK)' into log in 100000 kr.
 dataset['Prices (2015-DKK)'] = np.log(dataset['Prices (2015-DKK)'] / 100000)
