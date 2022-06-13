@@ -80,28 +80,6 @@ def new_prices(rate_1, rate_2, rate_3, reg_beløb_1, reg_beløb_2, bundfradrag, 
             new_prices.append(new_price)
     return new_prices
 
-"""
-new_prices1 = []
-for i in range(0, dataset.shape[0]):
-    av_i = dataset.loc[i, 'afgiftspligtig_værdi']
-    fuel_i = dataset.loc[i, 'Fuel']
-    if fuel_i == 'El':
-        new_price = av.pris_efter_reg_afgift_el(afgiftspligtig_værdi = av_i, bundfradrag = 25658.84, ekstra_bundfradrag = 170000, indfasning = 0.01, 
-                                                reg_beloeb1 = 77094.65, reg_beloeb2 = 239721.34, el_fradrag = 1700,
-                                                part_1 = 0.15, part_2 = 0.50, part_3 = 1.00)
-        new_prices1.append(new_price)
-    elif fuel_i == 'Benzin':
-        new_price = av.pris_efter_reg_afgift_ben(afgiftspligtig_værdi = av_i, bundfradrag = 21700, 
-                                                reg_beloeb1 = 65000, reg_beloeb2 = 202200, 
-                                                part_1 = 0.25, part_2 = 0.85, part_3 = 1.5)
-        new_prices1.append(new_price)
-    else:
-        new_price = av.pris_efter_reg_afgift_die(afgiftspligtig_værdi = av_i, bundfradrag = 21700, 
-                                                reg_beloeb1 = 65000, reg_beloeb2 = 202200,
-                                                part_1 = 0.25, part_2 = 0.85, part_3 = 1.50)
-        new_prices1.append(new_price)
-"""
-
 new_prices = new_prices(rate_1 = 0.25, rate_2 = 0.85, rate_3 = 1.5, reg_beløb_1 = 77094.65, reg_beløb_2 = 239721.34, 
                         bundfradrag = 25658.84, el_bundfradrag_1 = 137000.00, el_fradrag_2 = 0, indfasning = 0.80)
                 #2030 - satserne 
@@ -238,12 +216,6 @@ Diesel_emission_2030 = 158.69
 EV_emission_2030 = 1.17
 emission_2030_sum = Gasoline_emission_2030 + Diesel_emission_2030 + EV_emission_2030
 print('Sum af 2030-udledning = ',emission_2030_sum)
-
-#Gasoline_emission_2030_test = 3791759.39913
-#Diesel_emission_2030_test = 2380763.93205
-#EV_emission_2030_test = 1.44271
-#emission_2030_test_sum = Gasoline_emission_2030_test + Diesel_emission_2030_test + EV_emission_2030_test
-#print('Sum af 2030_test-udledning = ',emission_2030_test_sum)
 
 Forskel_i_procent = ((emission_2030_sum - emission_2020_sum)/emission_2020_sum)*100
 print('Procentvis forskel i 2020 vs 2030 CO2-udledning = ',Forskel_i_procent)
