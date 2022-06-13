@@ -51,6 +51,6 @@ def clogt_estimation(x, y, x_vars):
     theta0 = logit.starting_values(y = y, x = x)
     res = estimation.estimate(logit.q, theta0, y, x, cov_type = 'Sandwich', method = 'BFGS', options = {'disp':True, 'maxiter':10_000}, tol = 1e-8)
     table = pd.DataFrame({'Coefficients' : res['theta_hat'], 'se' : res['se'], 't-values' : res['t']}, index = x_vars)
-    print("\n", table)
+    #print("\n", table)
     return res
 clogt_estimation(x = x, y = y, x_vars = x_vars)
