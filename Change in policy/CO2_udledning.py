@@ -36,7 +36,7 @@ def get_x_y(dataset, dummyvar = None, attributes = []):
     
     if dummyvar is not None: 
         dummies = pd.get_dummies(dataset[dummyvar])
-        dummy_names = [f'{dummyvar} = {v}' for v in list(dummies.columns[1:].values)] # omit a reference category 
+        dummy_names = [f'{dummyvar} = {v}' for v in list(dummies.columns[1:].values)]
         x_dummies = dummies.values[:, 1:]
         x_vars += dummy_names
         x = np.hstack([x_attributes, x_dummies]).reshape(N, J, -1)
