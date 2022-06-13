@@ -5,4 +5,4 @@ Tryk her: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/
 
 
 BEMÆRK: 
-I de følgende filer, data_research.py og descriptive_statistics.py, skal man selv downloaded datasættet fra mappen Data, hvorefter man skal skrive sin egen path til det downloade datasæt, i kodefilen. Dette drejer sig om filerne. 
+I de følgende filer, data_research.py og descriptive_statistics.py, skal man selv downloade datasættet fra mappen Data, hvorefter man skal skrive sin egen path til det downloadede datasæt, i kodefilen. Dette drejer sig om filerne. 
