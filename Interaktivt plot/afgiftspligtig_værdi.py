@@ -10,7 +10,7 @@ def pris_efter_reg_afgift_ben(afgiftspligtig_værdi, bundfradrag = 21700.0, reg_
     CO2_tillaeg = CO2_NEDC * CO2_takst
     if afgiftspligtig_værdi < reg_beloeb1:
         reg_part1 = part_1 * afgiftspligtig_værdi
-        endelig_reg_afgift = reg_part1 + CO2_tillaeg - bundfradrag # Find ud af om bundfradrag altid skal trækkes fra her
+        endelig_reg_afgift = reg_part1 + CO2_tillaeg - bundfradrag
         return afgiftspligtig_værdi + endelig_reg_afgift
     else:
         reg_part1 = part_1 * reg_beloeb1
@@ -31,7 +31,7 @@ def pris_efter_reg_afgift_die(afgiftspligtig_værdi, bundfradrag = 21700.0, reg_
     CO2_tillaeg = CO2_NEDC * CO2_takst
     if afgiftspligtig_værdi < reg_beloeb1:
         reg_part1 = part_1 * afgiftspligtig_værdi
-        endelig_reg_afgift = reg_part1 + CO2_tillaeg - bundfradrag # Find ud af om bundfradrag altid skal trækkes fra her
+        endelig_reg_afgift = reg_part1 + CO2_tillaeg - bundfradrag
         return afgiftspligtig_værdi + endelig_reg_afgift
     else:
         reg_part1 = part_1 * reg_beloeb1
@@ -53,7 +53,7 @@ def pris_efter_reg_afgift_el(afgiftspligtig_værdi, bundfradrag = 21700.0, ekstr
         ny_afgiftspligtig_værdi = afgiftspligtig_værdi - samlet_el_fradrag
         if ny_afgiftspligtig_værdi < reg_beloeb1:
             reg_part1 = part_1 * ny_afgiftspligtig_værdi
-            endelig_reg_afgift = reg_part1 - bundfradrag # Find ud af om bundfradrag altid skal trækkes fra her
+            endelig_reg_afgift = reg_part1 - bundfradrag
             if endelig_reg_afgift < 0:
                 return afgiftspligtig_værdi
             else: 
